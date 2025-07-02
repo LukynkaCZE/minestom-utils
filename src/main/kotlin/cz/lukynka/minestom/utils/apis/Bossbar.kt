@@ -7,6 +7,7 @@ import cz.lukynka.minestom.utils.minimessage.miniMessage
 import net.kyori.adventure.bossbar.BossBar
 import net.minestom.server.entity.Player
 import net.minestom.server.event.player.PlayerDisconnectEvent
+import net.minestom.server.instance.block.Block
 import net.minestom.server.network.packet.server.play.BossBarPacket
 import java.util.*
 
@@ -23,6 +24,7 @@ class Bossbar(title: String = "", progress: Float = 1f, color: BossBar.Color, no
     val notches = bindablePool.provideBindable(notches)
 
     init {
+
         this.title.valueChanged { event ->
             val action = BossBarPacket.UpdateTitleAction(event.newValue.miniMessage)
             viewers.sendPacket(BossBarPacket(uuid, action))
@@ -33,17 +35,17 @@ class Bossbar(title: String = "", progress: Float = 1f, color: BossBar.Color, no
             viewers.sendPacket(BossBarPacket(uuid, action))
         }
 
-        this.color.valueChanged { event ->
+        this.color.valueChanged { _ ->
             val action = BossBarPacket.UpdateStyleAction(this.color.value, this.notches.value)
             viewers.sendPacket(BossBarPacket(uuid, action))
         }
 
-        this.notches.valueChanged { event ->
+        this.notches.valueChanged { _ ->
             val action = BossBarPacket.UpdateStyleAction(this.color.value, this.notches.value)
             viewers.sendPacket(BossBarPacket(uuid, action))
         }
 
-        val listener = eventPool.on<PlayerDisconnectEvent> { event ->
+        eventPool.on<PlayerDisconnectEvent> { event ->
             removeViewer(event.player)
         }
     }

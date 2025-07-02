@@ -1,6 +1,7 @@
 package cz.lukynka.minestom.utils.extensions
 
 import cz.lukynka.minestom.utils.minimessage.miniMessage
+import cz.lukynka.minestom.utils.types.Location
 import net.minestom.server.entity.Player
 import net.minestom.server.network.packet.client.ClientPacket
 import net.minestom.server.network.packet.server.SendablePacket
@@ -24,6 +25,8 @@ fun Player.send(message: String) {
 fun Player.sendActionBar(text: String) {
     this.sendPacket(SystemChatPacket(text.miniMessage, true))
 }
+
+val Player.location: Location get() = this.position.toLocation(this.instance)
 
 // lists
 
